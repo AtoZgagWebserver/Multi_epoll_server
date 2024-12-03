@@ -1,0 +1,11 @@
+[
+  {"nickname":"4점입니다","score":4}
+,
+  {"nickname":"2점","score":2}
+,
+  {"nickname":"2점","score":2}
+,
+  {"nickname":"1점","score":0}
+,
+  {"nickname":"빵점 2","score":0}
+]

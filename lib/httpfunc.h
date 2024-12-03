@@ -20,7 +20,9 @@ struct HTTPRequest
 
 #endif
 
-//functions 
+// functions
 void parse_http_request(const char *request, struct HTTPRequest *http_request);
 void send_file_content(int cli, const char *file_path);
 void send_quiz(int cli);
+void get_score(int cli);
+void post_score(int cli, const char *body);
