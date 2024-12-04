@@ -1,0 +1,11 @@
+빌드
+Makefile이 위치한 폴더에서 make 명령어 실행하여 빌드
+재빌드시 make clear 후 빌드
+
+실행
+.\server 포트넘버 스레드수 
+스레드수는 컴퓨터 성능에 맞춰서 입력
+Ex) .\server 10645 8
+
+데이터 로드등 준비과정 후 "Ready for accept client" 출력후 부터 동작
+  
