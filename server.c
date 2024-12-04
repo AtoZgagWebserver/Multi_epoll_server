@@ -1,13 +1,6 @@
 #include "lib/headerlist.h"
 #include "lib/readdata.h"
 #include "lib/processepoll.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <arpa/inet.h>
-#include <sys/epoll.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 #define MAX_EVENT 1024
 
@@ -128,6 +121,7 @@ int main(int argc, char* argv[])
 
     // 클라이언트 수락 및 처리
     int ns, ev_num;
+
     while(1)
     {
         ev_num = epoll_wait(sv_ep, events, MAX_EVENT, -1);
@@ -136,22 +130,21 @@ int main(int argc, char* argv[])
             perror("epoll_wait sv_ep");
             exit(1);
         }
-
-        if((ns=accept(sd, (struct sockaddr*)&cli, &clientlen)) == -1)
-        {
-            perror("accept");
-            exit(1);
+        for (int i = 0; i < ev_num; i++) {
+            if (events[i].data.fd == sd) {
+                // 새 클라이언트 수락
+                ns = accept(sd, (struct sockaddr *)&cli, &clientlen);
+            if (ns == -1) {
+                perror("accept");
+                continue;
+            }
+            set_nonblocking(ns);
+            //send_cors_headers(ns);
+            add_fd_to_manager(epm_list[cnt].ep, ns);
+            cnt = (cnt + 1) % mannum;
+            } 
         }
-        
-        set_nonblocking(ns);
-        
-        // CORS 헤더 전송
-        send_cors_headers(ns);
-        
-        add_fd_to_manager(epm_list[cnt].ep, ns);
-        cnt = (cnt + 1) % mannum;
     }
-
     close(sd);
     return 0;
 }

@@ -65,8 +65,15 @@ void *epoll_manager(void *arg)
         }
         for (int i = 0; i < ev_size; i++)
         {
-            size = recv(ev[i].data.fd, buf, sizeof(buf) - 1, 0);
-            if (size <= 0)
+            int total = 0;
+            while(1)
+            {
+                size = read(ev[i].data.fd, buf-total, sizeof(buf) - 1 - total);
+                if(size <=0)
+                    break;
+                total+=size;
+            }
+            if (total <= 0)
             {
                 close(ev[i].data.fd);
                 del_fd_from_manager(epm->ep, ev[i].data.fd);
